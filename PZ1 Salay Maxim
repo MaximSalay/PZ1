@@ -1,0 +1,49 @@
+import re
+import sys
+
+
+def check_password(password):
+    # Проверка длины пароля
+    if len(password) < 10:
+        return False, "Пароль должен содержать не менее 10 символов"
+    # Проверка наличия прописных и строчных букв
+    if not re.search("[a-z]", password) or not re.search("[A-Z]", password):
+        return False, "Пароль должен содержать прописные и строчные буквы"
+    # Проверка наличия цифр
+    if not re.search("[0-9]", password):
+        return False, "Пароль должен содержать хотя бы одну цифру"
+    # Проверка наличия специальных символов
+    if not re.search("[!@#$%^&*()_+=\{\}\[\]:;\"'|<>,.?/~`]", password):
+        return False, "Пароль должен содержать хотя бы один специальный символ"
+    
+    return True, None
+
+
+def main():
+    # Проверяем передан ли путь до файла
+    if len(sys.argv) < 2:
+        print("Не задан путь до файла с паролями")
+        return
+    
+    # Открываем файл с паролями
+    try:
+        with open(sys.argv[1], "r") as file:
+            # Читаем построчно и проверяем каждый пароль
+            for line in file:
+                password = line.strip()
+                is_valid, message = check_password(password)
+                if is_valid:
+                    print(f"Пароль '{password}' соответствует требованиям")
+                else:
+                    print(f"Пароль '{password}' слабый: {message}")
+    except FileNotFoundError:
+        print("Файл не найден")
+
+
+if __name__ == '__main__':
+    main()
+
+
+
+ 
+ 
